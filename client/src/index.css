@@ -1,0 +1,26 @@
+/* Base reset and variables */
+:root {
+  --bg: #0b0f15;
+  --card: #121821;
+  --muted: #1a2230;
+  --text: #e6edf3;
+  --subtle: #aeb8c4;
+  --primary: #5b9bff;
+  --accent: #7c4dff;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; }
+

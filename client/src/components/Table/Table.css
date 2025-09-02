@@ -1,0 +1,7 @@
+.table-wrap { width: 100%; overflow: auto; border: 1px solid var(--muted); border-radius: 12px; }
+.table { width: 100%; border-collapse: collapse; min-width: 640px; background: var(--card); }
+.table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--muted); }
+.table th { color: var(--subtle); font-weight: 600; background: var(--muted); }
+.table tr:hover td { background: rgba(255,255,255,0.02); }
+.muted { color: var(--subtle); text-align: center; }
+

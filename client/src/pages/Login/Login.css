@@ -1,0 +1,15 @@
+.title { margin: 0 0 6px 0; }
+.subtitle { margin: 0 0 18px 0; color: var(--subtle); }
+.form { display: grid; gap: 10px; }
+.label { font-size: 14px; color: var(--subtle); }
+.input {
+  background: var(--bg);
+  border: 1px solid var(--muted);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+.input:focus { outline: 2px solid var(--primary); border-color: transparent; }
+.error { color: var(--danger); font-size: 14px; }
+.w-full { width: 100%; }
+
