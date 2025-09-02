@@ -83,7 +83,8 @@ router.get('/', protect, authorize('admin', 'teacher'), async (req, res, next) =
 // @access  Private (Admin, Teacher)
 router.post('/batch', protect, authorize('admin', 'teacher'), async (req, res, next) => {
   try {
-    const { examId, subjectId, classId, sectionId, academicYear, grades } = req.body;
+    const { examId, subjectId, classId, academicYear, grades } = req.body;
+    const sectionId = req.body.sectionId || req.body.section;
 
     // Validate top-level refs
     const errors = [];
@@ -94,13 +95,16 @@ router.post('/batch', protect, authorize('admin', 'teacher'), async (req, res, n
     if (errors.length) return res.status(400).json({ success: false, message: errors.join(', ') });
 
     // Ensure entities belong to the same school
-    const checks = await Promise.all([
+    const [examOk, subjectOk, classOk, sectionOk] = await Promise.all([
       Exam.exists({ _id: examId, school: req.user.school }),
       Subject.exists({ _id: subjectId, school: req.user.school }),
       Class.exists({ _id: classId, school: req.user.school }),
       sectionId ? Section.exists({ _id: sectionId, school: req.user.school }) : Promise.resolve(true)
     ]);
-    if (checks.some(v => !v)) return res.status(400).json({ success: false, message: 'Exam/Subject/Class/Section not found in this school' });
+    if (!examOk) return res.status(400).json({ success: false, message: 'Exam not found in this school' });
+    if (!subjectOk) return res.status(400).json({ success: false, message: 'Subject not found in this school' });
+    if (!classOk) return res.status(400).json({ success: false, message: 'Class not found in this school' });
+    if (!sectionOk) return res.status(400).json({ success: false, message: 'Section not found in this school' });
 
     const results = {
       success: [],
