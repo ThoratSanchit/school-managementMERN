@@ -229,4 +229,72 @@ router.get('/subjects', protect, authorize('admin', 'teacher'), async (req, res,
   }
 });
 
+// @desc    Bulk create subjects
+// @route   POST /api/library/subjects/bulk
+// @access  Private (Admin)
+router.post('/subjects/bulk', protect, authorize('admin'), async (req, res, next) => {
+  try {
+    const payload = Array.isArray(req.body) ? req.body : [];
+    if (!payload.length) {
+      return res.status(400).json({ success: false, message: 'Please provide an array of subjects' });
+    }
+
+    const docs = [];
+    const errors = [];
+
+    for (let i = 0; i < payload.length; i++) {
+      const s = payload[i];
+      if (!s?.name || !s?.code || !s?.department || !s?.periodsPerWeek) {
+        errors.push({ index: i, error: 'Missing required fields (name, code, department, periodsPerWeek)' });
+        continue;
+      }
+      docs.push({
+        school: req.user.school,
+        name: s.name,
+        code: s.code,
+        type: s.type,
+        category: s.category,
+        department: s.department,
+        periodsPerWeek: s.periodsPerWeek
+      });
+    }
+
+    let inserted = [];
+    if (docs.length) {
+      try {
+        inserted = await Subject.insertMany(docs, { ordered: false });
+      } catch (bulkErr) {
+        // Collect duplicate/validation errors with readable messages
+        if (bulkErr?.writeErrors?.length) {
+          bulkErr.writeErrors.forEach(we => {
+            const err = we.err || we;
+            let msg = err.errmsg || err.message || 'Insert error';
+            // Friendly duplicate message
+            if (msg && msg.includes('duplicate key')) {
+              const codeVal = docs[we.index]?.code;
+              msg = `Subject with code ${codeVal} already exists`;
+            }
+            errors.push({ index: we.index, error: msg });
+          });
+        } else if (bulkErr.message) {
+          errors.push({ index: null, error: bulkErr.message });
+        }
+        // Find successfully inserted docs for response
+        inserted = await Subject.find({ school: req.user.school, code: { $in: docs.map(d => d.code) } });
+      }
+    }
+
+    res.status(201).json({
+      success: true,
+      data: {
+        insertedCount: inserted.length,
+        inserted: inserted.map(d => ({ id: d._id, name: d.name, code: d.code })),
+        errors
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

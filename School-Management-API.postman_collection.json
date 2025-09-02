@@ -79,6 +79,28 @@
           "response": []
         },
         {
+          "name": "List Subjects",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{authToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/library/subjects?q=math", "host": ["{{baseUrl}}"], "path": ["library", "subjects"], "query": [ { "key": "q", "value": "math" } ] }
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Create Subjects",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{authToken}}" } ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"name\": \"Physics\",\n    \"code\": \"PHYS\",\n    \"type\": \"core\",\n    \"category\": \"theory\",\n    \"department\": \"Science\",\n    \"periodsPerWeek\": 6\n  },\n  {\n    \"name\": \"Chemistry\",\n    \"code\": \"CHEM\",\n    \"type\": \"core\",\n    \"category\": \"theory\",\n    \"department\": \"Science\",\n    \"periodsPerWeek\": 6\n  },\n  {\n    \"name\": \"Biology\",\n    \"code\": \"BIOL\",\n    \"type\": \"core\",\n    \"category\": \"theory\",\n    \"department\": \"Science\",\n    \"periodsPerWeek\": 5\n  },\n  {\n    \"name\": \"Mathematics\",\n    \"code\": \"MATH\",\n    \"type\": \"core\",\n    \"category\": \"theory\",\n    \"department\": \"Mathematics\",\n    \"periodsPerWeek\": 7\n  },\n  {\n    \"name\": \"English\",\n    \"code\": \"ENG\",\n    \"type\": \"core\",\n    \"category\": \"theory\",\n    \"department\": \"Languages\",\n    \"periodsPerWeek\": 5\n  },\n  {\n    \"name\": \"History\",\n    \"code\": \"HIST\",\n    \"type\": \"elective\",\n    \"category\": \"theory\",\n    \"department\": \"Humanities\",\n    \"periodsPerWeek\": 4\n  },\n  {\n    \"name\": \"Geography\",\n    \"code\": \"GEOG\",\n    \"type\": \"elective\",\n    \"category\": \"theory\",\n    \"department\": \"Humanities\",\n    \"periodsPerWeek\": 4\n  },\n  {\n    \"name\": \"Computer Science\",\n    \"code\": \"CS\",\n    \"type\": \"core\",\n    \"category\": \"practical\",\n    \"department\": \"Technology\",\n    \"periodsPerWeek\": 5\n  },\n  {\n    \"name\": \"Economics\",\n    \"code\": \"ECON\",\n    \"type\": \"elective\",\n    \"category\": \"theory\",\n    \"department\": \"Commerce\",\n    \"periodsPerWeek\": 5\n  },\n  {\n    \"name\": \"Physical Education\",\n    \"code\": \"PE\",\n    \"type\": \"elective\",\n    \"category\": \"practical\",\n    \"department\": \"Sports\",\n    \"periodsPerWeek\": 3\n  }\n]"
+            },
+            "url": { "raw": "{{baseUrl}}/library/subjects/bulk", "host": ["{{baseUrl}}"], "path": ["library", "subjects", "bulk"] }
+          },
+          "response": []
+        },
+        {
           "name": "Create Section",
           "request": {
             "method": "POST",
@@ -87,6 +109,15 @@
               "mode": "raw",
               "raw": "{\n  \"class\": \"{{classId}}\",\n  \"name\": \"A\",\n  \"academicYear\": \"2024-2025\"\n}"
             },
+            "url": { "raw": "{{baseUrl}}/classes/{{classId}}/sections", "host": ["{{baseUrl}}"], "path": ["classes", "{{classId}}", "sections"] }
+          },
+          "response": []
+        },
+        {
+          "name": "List Sections for Class",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{authToken}}" } ],
             "url": { "raw": "{{baseUrl}}/classes/{{classId}}/sections", "host": ["{{baseUrl}}"], "path": ["classes", "{{classId}}", "sections"] }
           },
           "response": []

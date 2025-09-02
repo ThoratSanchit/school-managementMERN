@@ -30,7 +30,24 @@ const subjectSchema = new mongoose.Schema({
   },
   department: {
     type: String,
-    enum: ['Mathematics', 'Science', 'English', 'Hindi', 'Social_Studies', 'Computer_Science', 'Physical_Education', 'Arts', 'Music', 'Other'],
+    enum: [
+      'Mathematics',
+      'Science',
+      'English',
+      'Hindi',
+      'Social_Studies',
+      'Computer_Science',
+      'Physical_Education',
+      'Arts',
+      'Music',
+      // Additional commonly used groupings
+      'Languages',
+      'Humanities',
+      'Technology',
+      'Commerce',
+      'Sports',
+      'Other'
+    ],
     required: true
   },
   classes: [{
