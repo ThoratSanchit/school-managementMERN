@@ -4,6 +4,10 @@ export function getToken() {
   return localStorage.getItem('authToken') || ''
 }
 
+export function removeToken() {
+  localStorage.removeItem('authToken')
+}
+
 export async function api(path, options = {}) {
   const headers = {
     'Content-Type': 'application/json',
@@ -21,6 +25,17 @@ export async function api(path, options = {}) {
     throw new Error(data?.message || 'Request failed')
   }
   return data
+}
+
+export const authApi = {
+  login: (credentials) => api('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(credentials)
+  }),
+  logout: () => {
+    removeToken()
+    return Promise.resolve({ message: 'Logged out successfully' })
+  }
 }
 
 export const studentsApi = {

@@ -1,7 +1,16 @@
-import { Outlet, NavLink } from 'react-router-dom'
+import { Outlet, NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../App.jsx'
 import './AppLayout.css'
 
 export default function AppLayout() {
+  const { logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -22,7 +31,7 @@ export default function AppLayout() {
         <header className="topbar">
           <div className="title">Dashboard</div>
           <div className="spacer" />
-          <button className="btn btn-primary">Logout</button>
+          <button className="btn btn-primary" onClick={handleLogout}>Logout</button>
         </header>
         <div className="content">
           <Outlet />

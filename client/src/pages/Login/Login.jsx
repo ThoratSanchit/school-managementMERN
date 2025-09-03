@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../App.jsx'
+import { authApi } from '../../lib/api.js'
 import './Login.css'
 
 export default function LoginPage() {
@@ -6,21 +9,17 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   const onSubmit = async (e) => {
     e.preventDefault()
     setError('')
     setLoading(true)
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE || 'http://localhost:5000/api'}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data?.message || 'Login failed')
-      localStorage.setItem('authToken', data.token)
-      window.location.href = '/dashboard'
+      const data = await authApi.login({ email, password })
+      login(data.token)
+      navigate('/dashboard')
     } catch (err) {
       setError(err.message)
     } finally {
